@@ -1,0 +1,30 @@
+# Copyright 2023 Adobe
+# All Rights Reserved.
+
+# NOTICE: Adobe permits you to use, modify, and distribute this file in
+# accordance with the terms of the Adobe license agreement accompanying
+# it.
+
+operations:
+  view:
+    - type: web
+      impl: index.html
+actions: actions
+web: web-src
+hooks:
+  pre-app-run: node node_modules/@adobe/uix-guest/scripts/generate-metadata.js
+  pre-app-build: node node_modules/@adobe/uix-guest/scripts/generate-metadata.js
+  post-app-deploy: ./hooks/post-deploy.js
+runtimeManifest:
+  packages:
+    aem-cf-console-admin-1:
+      license: Apache-2.0
+      actions:
+        generate-image:
+          function: actions/generate-image/index.js
+          web: 'yes'
+          runtime: nodejs:16
+          inputs:
+            LOG_LEVEL: debug
+            OPENAI_API_KEY: $OPENAI_API_KEY
+            GENERATED_IMAGES_DAM_PATH: '/content/dam/gen-ai'
